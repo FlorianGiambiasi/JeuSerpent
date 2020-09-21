@@ -8,7 +8,7 @@ window.onload = function(){
     const heightInBlocks = canvasHeight/blockSize;
     const centreX = canvasWidth / 2;
     const centreY = canvasHeight / 2;
-    let delay = 100;
+    let delay;
     let snakee;
     let applee; 
     let score;
@@ -24,9 +24,15 @@ window.onload = function(){
         canvas.style.display = "block";
         canvas.style.backgroundColor = "#ddd";
         document.body.appendChild(canvas);
+        launch();
+    }
+
+    function launch(){
         snakee = new Snake([[6,4],[5,4],[4,4],[3,4],[2,4]],"right");
         applee = new Apple([10,10]);
         score = 0;
+        clearTimeout(timeOut);
+        delay = 100;
         refreshCanvas();
     }
     
@@ -73,15 +79,6 @@ window.onload = function(){
         ctx.strokeText("Appuyer sur la touche Espace pour rejouer", centreX, centreY - 120);
         ctx.fillText("Appuyer sur la touche Espace pour rejouer", centreX, centreY - 120);
         ctx.restore();
-    }
-    
-    function restart(){
-        snakee = new Snake([[6,4],[5,4],[4,4],[3,4],[2,4]],"right");
-        applee = new Apple([10,10]);
-        score = 0;
-        clearTimeout(timeOut);
-        delay = 100;
-        refreshCanvas();
     }
     
     function drawScore(){
@@ -243,7 +240,7 @@ window.onload = function(){
                 newDirection = "down";
                 break;
             case 32:
-                restart();
+                launch();
                 return;
             default:
                 return;
