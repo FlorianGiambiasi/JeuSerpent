@@ -96,12 +96,15 @@ window.onload = () => {
         ctx.fillRect(x,y,blockSize,blockSize);
     }
     
-    function Snake(body, direction){
-        this.body = body;
-        this.direction = direction;
-        this.ateApple = false;
-        
-        this.draw = function(){
+    class Snake {
+
+        constructor (body, direction){
+            this.body = body;
+            this.direction = direction;
+            this.ateApple = false;
+        }
+
+        draw(){
             ctx.save();
             ctx.fillStyle="#ff0000";
             for (let i=0 ; i < this.body.length ; i++){
@@ -110,7 +113,7 @@ window.onload = () => {
             ctx.restore();
         };
         
-        this.advance = function(){
+        advance(){
             const nextPosition = this.body[0].slice();
             switch(this.direction){
                 case "left":
@@ -135,7 +138,7 @@ window.onload = () => {
                 this.ateApple = false;
         };
         
-        this.setDirection = function(newDirection){
+        setDirection(newDirection){
             let allowedDirections;
             switch(this.direction){
                 case "left":
@@ -154,7 +157,7 @@ window.onload = () => {
             }
         };
         
-        this.checkCollision = function(){
+        checkCollision(){
             let wallCollision = false;
             let snakeCollision = false;
             const head = this.body[0];
@@ -179,7 +182,7 @@ window.onload = () => {
             return wallCollision || snakeCollision;        
         };
         
-        this.isEatingApple = function(appleToEat){
+        isEatingApple(appleToEat){
             const head = this.body[0];
             if (head[0] === appleToEat.position[0] && head[1] === appleToEat.position[1])
                 return true;
@@ -189,37 +192,39 @@ window.onload = () => {
         
     }
     
-    function Apple(position){
-        this.position = position;
-        
-        this.draw = function(){
-          const radius = blockSize/2;
-          const x = this.position[0]*blockSize + radius;
-          const y = this.position[1]*blockSize + radius;
-          ctx.save();
-          ctx.fillStyle = "#33cc33";
-          ctx.beginPath();
-          ctx.arc(x, y, radius, 0, Math.PI*2, true);
-          ctx.fill();
-          ctx.restore();
-        };
-        
-        this.setNewPosition = function(){
-            const newX = Math.round(Math.random()*(widthInBlocks-1));
-            const newY = Math.round(Math.random()*(heightInBlocks-1));
-            this.position = [newX,newY];
-        }; 
-        
-        this.isOnSnake = function(snakeToCheck){
-            let isOnSnake = false;
-            for (let i=0 ; i < snakeToCheck.body.length ; i++){
-                if(this.position[0] === snakeToCheck.body[i][0] && this.position[1] === snakeToCheck.body[i][1]){
-                    isOnSnake = true;     
-                }
-            }
-            return isOnSnake;
-        };
+    class Apple {
 
+        constructor(position) {
+            this.position = position;
+        }
+
+        draw(){
+            const radius = blockSize/2;
+            const x = this.position[0]*blockSize + radius;
+            const y = this.position[1]*blockSize + radius;
+            ctx.save();
+            ctx.fillStyle = "#33cc33";
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI*2, true);
+            ctx.fill();
+            ctx.restore();
+          };
+          
+        setNewPosition(){
+              const newX = Math.round(Math.random()*(widthInBlocks-1));
+              const newY = Math.round(Math.random()*(heightInBlocks-1));
+              this.position = [newX,newY];
+          }; 
+          
+        isOnSnake(snakeToCheck){
+              let isOnSnake = false;
+              for (let i=0 ; i < snakeToCheck.body.length ; i++){
+                  if(this.position[0] === snakeToCheck.body[i][0] && this.position[1] === snakeToCheck.body[i][1]){
+                      isOnSnake = true;     
+                  }
+              }
+              return isOnSnake;
+          };
     }
     
     document.onkeydown = (e) => {
